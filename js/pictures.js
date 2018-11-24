@@ -22,6 +22,7 @@ var picture = {
   DEFAULT_BIG_PICTURE_INDEX: 1
 };
 var AVATAR_COUNT = 6;
+var mockPicturesArray = [];
 
 var template = document.querySelector('#picture').content.querySelector('a');
 var blockPictures = document.querySelector('.pictures');
@@ -29,9 +30,7 @@ var bigPicture = document.querySelector('.big-picture');
 var socialCommentList = document.querySelector('.social__comments');
 
 var getRandomNumber = function (min, max) {
-  var randomNumber = Math.floor(Math.random() * (max - min + 1)) + min;
-
-  return randomNumber;
+  return Math.floor(Math.random() * (max - min + 1)) + min;
 };
 
 var shakeArray = function (array) {
@@ -61,18 +60,18 @@ var createUrl = function () {
 };
 
 var createRandomPicturesArray = function (length) {
-  var pictures = [];
+
   var urlArray = createUrl();
   for (var i = 0; i < length; i++) {
-    pictures[i] = {
+    mockPicturesArray[i] = {
       url: urlArray[i],
       likes: getRandomNumber(picture.LIKES_MIN, picture.LIKES_MAX),
       comments: getRandomArray(picture.COMMENTS_ARRAY, picture.COMMENTS_COUNT_MAX),
-      description: picture.DESCRIPTION_ARRAY[getRandomNumber(0, picture.DESCRIPTION_ARRAY.length)]
+      description: picture.DESCRIPTION_ARRAY[getRandomNumber(0, picture.DESCRIPTION_ARRAY.length - 1)]
     };
   }
 
-  return pictures;
+  return mockPicturesArray;
 };
 
 var createItem = function (item) {
@@ -139,6 +138,6 @@ var generateBigPicture = function (item) {
   createComments(item, item.comments.length);
 };
 
-generateBigPicture(createRandomPicturesArray(picture.MOCK_COUNT)[picture.DEFAULT_BIG_PICTURE_INDEX]);
+generateBigPicture(mockPicturesArray[1]);
 document.querySelector('.social__comment-count').classList.add('visually-hidden');
 document.querySelector('.social__comments-loader').classList.add('visually-hidden');
