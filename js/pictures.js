@@ -97,7 +97,6 @@ var renderPictures = function (array) {
 };
 
 renderPictures(createRandomPicturesArray(picture.MOCK_COUNT));
-bigPicture.classList.remove('hidden');
 
 var getRandomAvatar = function () {
   return 'img/avatar-' + getRandomNumber(1, AVATAR_COUNT) + '.svg';
@@ -138,11 +137,143 @@ var createComments = function (item, count) {
 var generateBigPicture = function (item) {
   bigPicture.querySelector('.big-picture__img').querySelector('img').src = item.url;
   bigPicture.querySelector('.likes-count').textContent = item.likes;
-  bigPicture.querySelector('.comments-count').textContent = item.comments.length;
-  bigPicture.querySelector('.social__caption').textContent = item.description;
-  createComments(item, item.comments.length);
+  bigPicture.querySelector('.comments-count').textContent = item.comments;
+  createComments(mockPicturesArray[0], 2);
 };
 
-generateBigPicture(mockPicturesArray[0]);
-document.querySelector('.social__comment-count').classList.add('visually-hidden');
-document.querySelector('.social__comments-loader').classList.add('visually-hidden');
+// События
+// Редактирование изображения
+// Откртыие и закрытие окна редактирования
+var uploadFile = document.querySelector('#upload-file');
+var imageEditingForm = document.querySelector('.img-upload__overlay');
+var ESC_KEYCODE = 27;
+var closeButton = document.querySelector('#upload-cancel');
+
+var showEditingImage = function () {
+  imageEditingForm.classList.remove('hidden');
+  document.addEventListener('keydown', onImgUploadEscPress);
+};
+
+var closeEditingImage = function () {
+  imageEditingForm.classList.add('hidden');
+  document.removeEventListener('keydown', onImgUploadEscPress);
+};
+
+var onImgUploadEscPress = function (evt) {
+  if (evt.keyCode === ESC_KEYCODE) {
+    closeEditingImage();
+  }
+};
+
+uploadFile.addEventListener('change', showEditingImage);
+closeButton.addEventListener('click', closeEditingImage);
+
+// Наложение эффектов
+var radioBtnEffect = document.querySelectorAll('.effects__radio');
+var imgUploadPreview = document.querySelector('.img-upload__preview');
+var imgEditing = imgUploadPreview.querySelector('img');
+var effectSliderPin = document.querySelector('.effect-level__pin');
+var effectValue = document.querySelector('.effect-level__value');
+var sliderEffectLevel = document.querySelector('.img-upload__effect-level');
+var LINE_WIDTH = 453;
+var DEFAULT_PIN_POSITION = '20%';
+var currentEffectClass;
+
+// Функция наложения эффекта
+var onRadioEffectBtnClick = function (evt) {
+  sliderEffectLevel.classList.remove('hidden');
+  imgEditing.classList.remove(currentEffectClass);
+  currentEffectClass = 'effect__preview--' + evt.target.value;
+  imgEditing.classList.add(currentEffectClass);
+  if (evt.target.value === 'none') {
+    sliderEffectLevel.classList.add('hidden');
+  }
+  effectSliderPin.style.left = DEFAULT_PIN_POSITION;
+  onEffectSliderPinUp(evt.target.value);
+};
+
+for (var j = 0; j < radioBtnEffect.length; j++) {
+  radioBtnEffect[j].addEventListener('click', onRadioEffectBtnClick);
+}
+
+// Слайдер эффектов
+var onEffectSliderPinUp = function () {
+  effectValue = effectSliderPin.offsetLeft / LINE_WIDTH;
+
+  switch (currentEffectClass) {
+    case 'effect__preview--none':
+      imgUploadPreview.style.filter = '';
+      break;
+    case 'effect__preview--chrome':
+      imgUploadPreview.style.filter = 'grayscale(' + effectValue + ')';
+      break;
+    case 'effect__preview--sepia':
+      imgUploadPreview.style.filter = 'sepia(' + effectValue + ')';
+      break;
+    case 'effect__preview--marvin':
+      imgUploadPreview.style.filter = 'invert(' + effectValue * 100 + '%' + ')';
+      break;
+    case 'effect__preview--phobos':
+      imgUploadPreview.style.filter = 'blur(' + effectValue * 3 + 'px' + ')';
+      break;
+    case 'effect__preview--heat':
+      imgUploadPreview.style.filter = 'brightness(' + (effectValue * 2 + 1) + ')';
+      break;
+  }
+};
+
+effectSliderPin.addEventListener('mouseup', onEffectSliderPinUp);
+
+// Показ изображения в  полноэкранном режиме
+var btnModalClose = document.querySelector('.big-picture__cancel');
+
+// Закрытие модального окна
+var closeModal = function () {
+  document.body.classList.remove('modal-open');
+  bigPicture.classList.add('hidden');
+  document.removeEventListener('keydown', onbtnModalCloseEscPress);
+};
+
+// Открытие модального окна
+var openModal = function () {
+  bigPicture.classList.remove('hidden');
+  document.body.classList.add('modal-open');
+  document.addEventListener('keydown', onbtnModalCloseEscPress);
+};
+
+// Функции закрытия модального окна
+var onbtnModalCloseClick = function () {
+  closeModal();
+};
+
+var onbtnModalCloseEscPress = function (evt) {
+  if (evt.keyCode === ESC_KEYCODE) {
+    closeModal();
+  }
+};
+
+// Заполняем данные большой картинки
+var getPicturePreviewData = function (evt) {
+  var target = evt.currentTarget;
+  var imgPreviewData = {
+    url: target.querySelector('img').src,
+    likes: target.querySelector('.picture__likes').textContent,
+    comments: target.querySelector('.picture__comments').textContent,
+  };
+
+  return imgPreviewData;
+};
+
+// Обработчки события нажатия на превью картинку
+var onImagePreviewClick = function (evt) {
+  evt.preventDefault();
+  generateBigPicture(getPicturePreviewData(evt));
+  openModal();
+};
+
+// Добавляем обработчкик 'click' на превью картинки
+var imgPreviewList = document.querySelectorAll('.picture');
+for (var i = 0; i < imgPreviewList.length; i++) {
+  imgPreviewList[i].addEventListener('click', onImagePreviewClick);
+}
+btnModalClose.addEventListener('click', onbtnModalCloseClick);
