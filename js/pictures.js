@@ -231,14 +231,14 @@ var btnModalClose = document.querySelector('.big-picture__cancel');
 var closeModal = function () {
   document.body.classList.remove('modal-open');
   bigPicture.classList.add('hidden');
-  document.removeEventListener('keydown', onbtnModalCloseEscPress);
+  document.removeEventListener('keydown', onBtnModalCloseEscPress);
 };
 
 // Открытие модального окна
 var openModal = function () {
   bigPicture.classList.remove('hidden');
   document.body.classList.add('modal-open');
-  document.addEventListener('keydown', onbtnModalCloseEscPress);
+  document.addEventListener('keydown', onBtnModalCloseEscPress);
 };
 
 // Функции закрытия модального окна
@@ -246,7 +246,7 @@ var onbtnModalCloseClick = function () {
   closeModal();
 };
 
-var onbtnModalCloseEscPress = function (evt) {
+var onBtnModalCloseEscPress = function (evt) {
   if (evt.keyCode === ESC_KEYCODE) {
     closeModal();
   }
@@ -277,3 +277,36 @@ for (var i = 0; i < imgPreviewList.length; i++) {
   imgPreviewList[i].addEventListener('click', onImagePreviewClick);
 }
 btnModalClose.addEventListener('click', onbtnModalCloseClick);
+
+// Масштаб
+var inputScaleControlValue = document.querySelector('.scale__control--value');
+var btnScaleControlSmaller = document.querySelector('.scale__control--smaller');
+var btnScaleControlBigger = document.querySelector('.scale__control--bigger');
+inputScaleControlValue.value = '100%';
+// Фунцкия уменьшения масштаба
+var onBtnScaleControlSmallerClick = function () {
+  if (inputScaleControlValue.value.slice(0, -1) > 50) {
+    inputScaleControlValue.value = inputScaleControlValue.value.slice(0, -1) - 25 + '%';
+  } else {
+    inputScaleControlValue.value = 25 + '%';
+  }
+  onScaleControlValueChange(inputScaleControlValue.value);
+};
+
+// Добавление стиля transform scale
+var onScaleControlValueChange = function (value) {
+  imgUploadPreview.style.transform = 'scale(' + value.slice(0, -1) / 100 + ')';
+};
+
+// Функция увеличение масштаба
+var onBtnScaleControlBiggerClick = function () {
+  if (inputScaleControlValue.value.slice(0, -1) < 76) {
+    inputScaleControlValue.value = +inputScaleControlValue.value.slice(0, -1) + 25 + '%';
+  } else {
+    inputScaleControlValue.value = 100 + '%';
+  }
+  onScaleControlValueChange(inputScaleControlValue.value);
+};
+
+btnScaleControlSmaller.addEventListener('click', onBtnScaleControlSmallerClick);
+btnScaleControlBigger.addEventListener('click', onBtnScaleControlBiggerClick);
