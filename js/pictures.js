@@ -384,6 +384,13 @@ var onBtnScaleControlBiggerClick = function () {
 btnScaleControlSmaller.addEventListener('click', onBtnScaleControlSmallerClick);
 btnScaleControlBigger.addEventListener('click', onBtnScaleControlBiggerClick);
 
+// Работа с комментариями
+var comments = document.querySelector('.text__description');
+
+var setCommentsMsxLength = function () {
+  comments.maxLength = 140;
+};
+
 // Работа с хэштегами и отправкой формы
 var formUpload = document.querySelector('.img-upload__form');
 var inputHashtag = document.querySelector('.text__hashtags');
@@ -435,6 +442,7 @@ var checkValidations = function (evt) {
   }
 };
 
+setCommentsMsxLength();
 inputHashtag.addEventListener('change', checkValidations);
 inputHashtag.addEventListener('focus', function () {
   document.removeEventListener('keydown', onImgUploadEscPress);
