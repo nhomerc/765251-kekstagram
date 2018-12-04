@@ -461,3 +461,9 @@ inputHashtag.addEventListener('blur', function () {
   document.addEventListener('keydown', onImgUploadEscPress);
 });
 formUpload.addEventListener('submit', checkValidations);
+comments.addEventListener('focus', function () {
+  document.removeEventListener('keydown', onImgUploadEscPress);
+});
+comments.addEventListener('blur', function () {
+  document.addEventListener('keydown', onImgUploadEscPress);
+});
