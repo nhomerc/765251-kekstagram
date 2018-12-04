@@ -146,18 +146,32 @@ var generateBigPicture = function (item) {
 // Откртыие и закрытие окна редактирования
 var uploadFile = document.querySelector('#upload-file');
 var imageEditingForm = document.querySelector('.img-upload__overlay');
-var ESC_KEYCODE = 27;
 var closeButton = document.querySelector('#upload-cancel');
 var comments = document.querySelector('.text__description');
+var inputScaleControlValue = document.querySelector('.scale__control--value');
+var imgUploadPreview = document.querySelector('.img-upload__preview');
+var imgEditing = imgUploadPreview.querySelector('img');
+var effectSliderPin = document.querySelector('.effect-level__pin');
+var effectValue = document.querySelector('.effect-level__value');
+var sliderEffectLevel = document.querySelector('.img-upload__effect-level');
+var effectLevelDepth = document.querySelector('.effect-level__depth');
+var radioBtnEffect = document.querySelectorAll('.effects__radio');
+var inputHashtag = document.querySelector('.text__hashtags');
 var currentEffectClass;
+var ESC_KEYCODE = 27;
+var LINE_WIDTH = 453;
+var DEFAULT_PIN_POSITION = '20%';
 
 var defaultSettings = function () {
   effectSliderPin.style.left = DEFAULT_PIN_POSITION;
   effectLevelDepth.style.width = DEFAULT_PIN_POSITION;
-  inputScaleControlValue.value = '100%';
-  imgEditing.classList.remove(currentEffectClass);
+  inputScaleControlValue.value = 100 + '%';
+  imgUploadPreview.style.transform = 'scale(' + 1 + ')';
+  imgUploadPreview.style.filter = '';
+  imgEditing.className = '';
   inputHashtag.value = '';
   comments.value = '';
+  uploadFile.value = '';
 };
 
 var showEditingImage = function () {
@@ -181,17 +195,6 @@ uploadFile.addEventListener('change', showEditingImage);
 closeButton.addEventListener('click', closeEditingImage);
 
 // Наложение эффектов
-var radioBtnEffect = document.querySelectorAll('.effects__radio');
-var imgUploadPreview = document.querySelector('.img-upload__preview');
-var imgEditing = imgUploadPreview.querySelector('img');
-var effectSliderPin = document.querySelector('.effect-level__pin');
-var effectValue = document.querySelector('.effect-level__value');
-var sliderEffectLevel = document.querySelector('.img-upload__effect-level');
-var effectLevelDepth = document.querySelector('.effect-level__depth');
-var LINE_WIDTH = 453;
-var DEFAULT_PIN_POSITION = '20%';
-
-
 // Функция наложения эффекта
 var onRadioEffectBtnClick = function (evt) {
   sliderEffectLevel.classList.remove('hidden');
@@ -363,7 +366,7 @@ for (var i = 0; i < imgPreviewList.length; i++) {
 btnModalClose.addEventListener('click', onbtnModalCloseClick);
 
 // Масштаб
-var inputScaleControlValue = document.querySelector('.scale__control--value');
+
 var btnScaleControlSmaller = document.querySelector('.scale__control--smaller');
 var btnScaleControlBigger = document.querySelector('.scale__control--bigger');
 inputScaleControlValue.value = '100%';
@@ -401,7 +404,7 @@ btnScaleControlBigger.addEventListener('click', onBtnScaleControlBiggerClick);
 
 // Работа с хэштегами и отправкой формы
 var formUpload = document.querySelector('.img-upload__form');
-var inputHashtag = document.querySelector('.text__hashtags');
+
 var MAX_TAGS = 5;
 var MAX_TAG_LENGTH = 20;
 
