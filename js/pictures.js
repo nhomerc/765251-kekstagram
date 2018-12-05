@@ -432,28 +432,27 @@ var checkValidateHashtag = function (arr) {
   return true;
 };
 
-var checkValidations = function (evt) {
-  evt.preventDefault();
+var checkHashtag = function () {
   inputHashtag.style.outline = '';
   inputHashtag.setCustomValidity('');
   var tempText = inputHashtag.value.replace(/\s+/g, ' ');
   tempText = tempText.replace(/^\s/, '');
   tempText = tempText.replace(/\s$/, '');
   inputHashtag.value = tempText;
-  if (inputHashtag.value === '') {
-    formUpload.submit();
-  } else {
-    var messageValidation = checkValidateHashtag(inputHashtag.value.split(' '));
-    if (messageValidation !== true) {
-      inputHashtag.style.outline = '3px solid red';
-      inputHashtag.setCustomValidity(messageValidation);
-    } else {
-      formUpload.submit();
-    }
+  var messageValidation = checkValidateHashtag(inputHashtag.value.split(' '));
+  if (messageValidation !== true) {
+    inputHashtag.style.outline = '3px solid red';
+    inputHashtag.setCustomValidity(messageValidation);
   }
 };
 
-inputHashtag.addEventListener('change', checkValidations);
+var checkValidations = function (evt) {
+  evt.preventDefault();
+  checkHashtag();
+  formUpload.submit();
+};
+
+inputHashtag.addEventListener('change', checkHashtag);
 inputHashtag.addEventListener('focus', function () {
   document.removeEventListener('keydown', onImgUploadEscPress);
 });
