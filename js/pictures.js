@@ -435,11 +435,13 @@ var checkValidateHashtag = function (arr) {
 };
 
 var checkHashtag = function () {
-  inputHashtag.value = inputHashtag.value.replace('  ', ' ');
-  if (inputHashtag.value === '') {
+  var hashtagString = inputHashtag.value;
+  hashtagString = hashtagString.trim().replace(/\s{2,}/g, ' ');
+
+  if (hashtagString === '') {
     return;
   }
-  var messageValidation = checkValidateHashtag(inputHashtag.value.split(' '));
+  var messageValidation = checkValidateHashtag(hashtagString.split(' '));
   if (messageValidation !== true) {
     inputHashtag.style.outline = '3px solid red';
     inputHashtag.setCustomValidity(messageValidation);
