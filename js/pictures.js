@@ -439,6 +439,9 @@ var checkHashtag = function () {
   tempText = tempText.replace(/^\s/, '');
   tempText = tempText.replace(/\s$/, '');
   inputHashtag.value = tempText;
+  if (inputHashtag.value === '') {
+    return;
+  }
   var messageValidation = checkValidateHashtag(inputHashtag.value.split(' '));
   if (messageValidation !== true) {
     inputHashtag.style.outline = '3px solid red';
@@ -452,7 +455,7 @@ var checkValidations = function (evt) {
   formUpload.submit();
 };
 
-inputHashtag.addEventListener('change', checkHashtag);
+inputHashtag.addEventListener('input', checkHashtag);
 inputHashtag.addEventListener('focus', function () {
   document.removeEventListener('keydown', onImgUploadEscPress);
 });
