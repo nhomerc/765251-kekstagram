@@ -429,16 +429,13 @@ var checkValidateHashtag = function (arr) {
       }
     }
   }
+  inputHashtag.style.outline = '';
+  inputHashtag.setCustomValidity('');
   return true;
 };
 
 var checkHashtag = function () {
-  inputHashtag.style.outline = '';
-  inputHashtag.setCustomValidity('');
-  var tempText = inputHashtag.value.replace(/\s+/g, ' ');
-  tempText = tempText.replace(/^\s/, '');
-  tempText = tempText.replace(/\s$/, '');
-  inputHashtag.value = tempText;
+  inputHashtag.value = inputHashtag.value.replace('  ', ' ');
   if (inputHashtag.value === '') {
     return;
   }
