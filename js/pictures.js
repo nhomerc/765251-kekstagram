@@ -429,31 +429,32 @@ var checkValidateHashtag = function (arr) {
       }
     }
   }
+  inputHashtag.style.outline = '';
+  inputHashtag.setCustomValidity('');
   return true;
+};
+
+var checkHashtag = function () {
+  var hashtagString = inputHashtag.value;
+  hashtagString = hashtagString.trim().replace(/\s{2,}/g, ' ');
+
+  if (hashtagString === '') {
+    return;
+  }
+  var messageValidation = checkValidateHashtag(hashtagString.split(' '));
+  if (messageValidation !== true) {
+    inputHashtag.style.outline = '3px solid red';
+    inputHashtag.setCustomValidity(messageValidation);
+  }
 };
 
 var checkValidations = function (evt) {
   evt.preventDefault();
-  inputHashtag.style.outline = '';
-  inputHashtag.setCustomValidity('');
-  var tempText = inputHashtag.value.replace(/\s+/g, ' ');
-  tempText = tempText.replace(/^\s/, '');
-  tempText = tempText.replace(/\s$/, '');
-  inputHashtag.value = tempText;
-  if (inputHashtag.value === '') {
-    formUpload.submit();
-  } else {
-    var messageValidation = checkValidateHashtag(inputHashtag.value.split(' '));
-    if (messageValidation !== true) {
-      inputHashtag.style.outline = '3px solid red';
-      inputHashtag.setCustomValidity(messageValidation);
-    } else {
-      formUpload.submit();
-    }
-  }
+  checkHashtag();
+  formUpload.submit();
 };
 
-inputHashtag.addEventListener('change', checkValidations);
+inputHashtag.addEventListener('input', checkHashtag);
 inputHashtag.addEventListener('focus', function () {
   document.removeEventListener('keydown', onImgUploadEscPress);
 });
@@ -461,3 +462,9 @@ inputHashtag.addEventListener('blur', function () {
   document.addEventListener('keydown', onImgUploadEscPress);
 });
 formUpload.addEventListener('submit', checkValidations);
+comments.addEventListener('focus', function () {
+  document.removeEventListener('keydown', onImgUploadEscPress);
+});
+comments.addEventListener('blur', function () {
+  document.addEventListener('keydown', onImgUploadEscPress);
+});
