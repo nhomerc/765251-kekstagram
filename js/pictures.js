@@ -160,7 +160,7 @@ var inputHashtag = document.querySelector('.text__hashtags');
 var currentEffectClass;
 var ESC_KEYCODE = 27;
 var LINE_WIDTH = 453;
-var DEFAULT_PIN_POSITION = '20%';
+var DEFAULT_PIN_POSITION = '100%';
 
 var defaultSettings = function () {
   effectSliderPin.style.left = DEFAULT_PIN_POSITION;
@@ -197,16 +197,14 @@ closeButton.addEventListener('click', closeEditingImage);
 // Наложение эффектов
 // Функция наложения эффекта
 var onRadioEffectBtnClick = function (evt) {
+  defaultSettings();
   sliderEffectLevel.classList.remove('hidden');
-  imgEditing.classList.remove(currentEffectClass);
   currentEffectClass = 'effect__preview--' + evt.target.value;
   imgEditing.classList.add(currentEffectClass);
   if (evt.target.value === 'none') {
     sliderEffectLevel.classList.add('hidden');
   }
-  effectSliderPin.style.left = DEFAULT_PIN_POSITION;
-  effectLevelDepth.style.width = DEFAULT_PIN_POSITION;
-  onEffectSliderPinUp(evt.target.value);
+  onEffectSliderPinMouseUp(DEFAULT_PIN_POSITION.slice(0, -1));
 };
 
 for (var j = 0; j < radioBtnEffect.length; j++) {
@@ -220,7 +218,7 @@ var btnEffectSliderPinMousedown = function (evt) {
   startCoordsX = evt.clientX;
 
   effectSliderPin.addEventListener('mousemove', onEffectSliderPinMove);
-  effectSliderPin.addEventListener('mouseup', onEffectSliderPinUp);
+  effectSliderPin.addEventListener('mouseup', onEffectSliderPinMouseUp);
 };
 
 // Обработчик движения слайдера
@@ -238,40 +236,39 @@ var onEffectSliderPinMove = function (evt) {
     effectSliderPin.style.left = LINE_WIDTH + 'px';
   }
   effectLevelDepth.style.width = effectSliderPin.style.left;
-  onEffectSliderPinUp();
+  effectValue.value = (effectSliderPin.offsetLeft / LINE_WIDTH) * 100;
+  onEffectSliderPinMouseUp(effectValue.value);
   effectSliderPin.addEventListener('mouseleave', onEffectSliderPinLeave);
 };
 
 // Обработчик покидания указателя со слайдера
 var onEffectSliderPinLeave = function (evt) {
   evt.preventDefault();
-  onEffectSliderPinUp();
+  onEffectSliderPinMouseUp();
   effectSliderPin.removeEventListener('mousemove', onEffectSliderPinMove);
-  effectSliderPin.removeEventListener('mouseup', onEffectSliderPinUp);
+  effectSliderPin.removeEventListener('mouseup', onEffectSliderPinMouseUp);
 };
 
 // Обработчик отпускания кнопки мыши и наложение эффектов
-var onEffectSliderPinUp = function () {
-  effectValue = effectSliderPin.offsetLeft / LINE_WIDTH;
-
+var onEffectSliderPinMouseUp = function (percent) {
   switch (currentEffectClass) {
     case 'effect__preview--none':
       imgUploadPreview.style.filter = '';
       break;
     case 'effect__preview--chrome':
-      imgUploadPreview.style.filter = 'grayscale(' + effectValue + ')';
+      imgUploadPreview.style.filter = 'grayscale(' + percent / 100 + ')';
       break;
     case 'effect__preview--sepia':
-      imgUploadPreview.style.filter = 'sepia(' + effectValue + ')';
+      imgUploadPreview.style.filter = 'sepia(' + percent / 100 + ')';
       break;
     case 'effect__preview--marvin':
-      imgUploadPreview.style.filter = 'invert(' + effectValue * 100 + '%' + ')';
+      imgUploadPreview.style.filter = 'invert(' + percent + '%' + ')';
       break;
     case 'effect__preview--phobos':
-      imgUploadPreview.style.filter = 'blur(' + effectValue * 3 + 'px' + ')';
+      imgUploadPreview.style.filter = 'blur(' + (percent / 100) * 3 + 'px' + ')';
       break;
     case 'effect__preview--heat':
-      imgUploadPreview.style.filter = 'brightness(' + (effectValue * 2 + 1) + ')';
+      imgUploadPreview.style.filter = 'brightness(' + ((percent / 100) * 2 + 1) + ')';
       break;
   }
 };
@@ -297,7 +294,8 @@ var onEffectSliderPinKeydown = function (evt) {
     effectSliderPin.style.left = LINE_WIDTH + 'px';
   }
   effectLevelDepth.style.width = effectSliderPin.style.left;
-  onEffectSliderPinUp();
+  effectValue.value = (effectSliderPin.offsetLeft / LINE_WIDTH) * 100;
+  onEffectSliderPinMouseUp(effectValue.value);
 };
 
 var onEffectSliderPinFocus = function () {
@@ -306,7 +304,7 @@ var onEffectSliderPinFocus = function () {
 
 effectSliderPin.addEventListener('click', function () {
   effectSliderPin.removeEventListener('mousemove', onEffectSliderPinMove);
-  effectSliderPin.removeEventListener('mouseup', onEffectSliderPinUp);
+  effectSliderPin.removeEventListener('mouseup', onEffectSliderPinMouseUp);
 });
 effectSliderPin.addEventListener('focus', onEffectSliderPinFocus);
 effectSliderPin.addEventListener('mousedown', btnEffectSliderPinMousedown);
