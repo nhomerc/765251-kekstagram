@@ -175,6 +175,7 @@ var defaultSettings = function () {
 };
 
 var showEditingImage = function () {
+  sliderEffectLevel.classList.add('hidden');
   imageEditingForm.classList.remove('hidden');
   document.addEventListener('keydown', onImgUploadEscPress);
 };
