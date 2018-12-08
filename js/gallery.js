@@ -56,6 +56,4 @@
 
     window.data.socialCommentList.appendChild(fragment);
   };
-
-
 })();
