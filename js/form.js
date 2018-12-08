@@ -16,7 +16,7 @@
   var effectLevelDepth = document.querySelector('.effect-level__depth');
   var radioBtnEffect = document.querySelectorAll('.effects__radio');
   var inputHashtag = document.querySelector('.text__hashtags');
-  var currentEffectClass;
+  var currentEffectClass = 'effect__preview--none';
   var formUpload = document.querySelector('.img-upload__form');
   var LINE_WIDTH = 453;
   var DEFAULT_PIN_POSITION = '100%';
@@ -36,7 +36,9 @@
 
   // Показ окна редактирования
   var showEditingImage = function () {
+    effectValue.value = DEFAULT_PIN_POSITION.slice(0, -1).toString();
     sliderEffectLevel.classList.add('hidden');
+    imgEditing.classList.add(currentEffectClass);
     imageEditingForm.classList.remove('hidden');
     document.addEventListener('keydown', onImgUploadEscPress);
   };
@@ -61,7 +63,7 @@
   // Наложение эффектов
   // Функция наложения эффекта
   var onRadioEffectBtnClick = function (evt) {
-    imgEditing.classList.remove(currentEffectClass);
+    imgEditing.className = '';
     sliderEffectLevel.classList.remove('hidden');
     currentEffectClass = 'effect__preview--' + evt.target.value;
     imgEditing.classList.add(currentEffectClass);
