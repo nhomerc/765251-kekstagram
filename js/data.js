@@ -1,11 +1,74 @@
 'use strict';
 
 (function () {
+  var template = document.querySelector('#picture').content.querySelector('a');
+  // Рандомайзер
+  var getRandomNumber = function (min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  };
+
+  // Создаем массив картинок и наполняем данными
+  var createRandomPicturesArray = function (length) {
+    var urlArray = createUrl();
+    for (var i = 0; i < length; i++) {
+      window.data.mockPicturesArray[i] = {
+        url: urlArray[i],
+        likes: getRandomNumber(window.data.picture.LIKES_MIN, window.data.picture.LIKES_MAX),
+        comments: getRandomCommentsArray(),
+        description: window.data.picture.DESCRIPTION_ARRAY[getRandomNumber(0, window.data.picture.DESCRIPTION_ARRAY.length - 1)]
+      };
+    }
+
+    return window.data.mockPicturesArray;
+  };
+
+  // Создаем описание картнинок в миниатюре
+  var createItem = function (item) {
+    var photo = template.cloneNode(true);
+    photo.querySelector('img').src = item.url;
+    photo.querySelector('.picture__comments').textContent = item.comments.length;
+    photo.querySelector('.picture__likes').textContent = item.likes;
+
+    return photo;
+  };
+
+  // Перемешиваем массив
+  var shakeArray = function (array) {
+    var j;
+    var temp;
+    for (var i = array.length - 1; i > 0; i--) {
+      j = Math.floor(Math.random() * (i + 1));
+      temp = array[j];
+      array[j] = array[i];
+      array[i] = temp;
+    }
+
+    return array;
+  };
+
+  // Создаем массив случайных комментариев
+  var getRandomCommentsArray = function () {
+    var commentsArray = [];
+    for (var i = 0; i < getRandomNumber(5, 100); i++) {
+      commentsArray[i] = shakeArray(window.data.picture.COMMENTS_ARRAY).slice(0, getRandomNumber(1, 2)).join(' ');
+    }
+
+    return commentsArray;
+  };
+
+  //  Создаем адреса на картинки
+  var createUrl = function () {
+    var urlArray = [];
+    for (var i = 0; i < window.data.picture.MOCK_COUNT; i++) {
+      urlArray[i] = 'photos/' + (i + 1) + '.jpg';
+    }
+
+    return shakeArray(urlArray);
+  };
+
   window.data = {
     ESC_KEYCODE: 27,
     bigPicture: document.querySelector('.big-picture'),
-    blockPictures: document.querySelector('.pictures'),
-    socialCommentList: document.querySelector('.social__comments'),
     picture: {
       LIKES_MIN: 15,
       LIKES_MAX: 200,
@@ -27,74 +90,12 @@
       COMMENTS_COUNT_MAX: 2,
       DEFAULT_BIG_PICTURE_INDEX: 1,
     },
-    AVATAR_COUNT: 6,
     mockPicturesArray: [],
     // Рандомайзер
-    getRandomNumber: function (min, max) {
-      return Math.floor(Math.random() * (max - min + 1)) + min;
-    },
+    randomizer: getRandomNumber,
     // Создаем массив картинок и наполняем данными
-    createRandomPicturesArray: function (length) {
-      var urlArray = createUrl();
-      for (var i = 0; i < length; i++) {
-        window.data.mockPicturesArray[i] = {
-          url: urlArray[i],
-          likes: window.data.getRandomNumber(window.data.picture.LIKES_MIN, window.data.picture.LIKES_MAX),
-          comments: getRandomCommentsArray(),
-          description: window.data.picture.DESCRIPTION_ARRAY[window.data.getRandomNumber(0, window.data.picture.DESCRIPTION_ARRAY.length - 1)]
-        };
-      }
-
-      return window.data.mockPicturesArray;
-    },
+    randomArray: createRandomPicturesArray,
     // Создаем описание картнинок в миниатюре
-    createItem: function (item) {
-      var photo = template.cloneNode(true);
-      photo.querySelector('img').src = item.url;
-      photo.querySelector('.picture__comments').textContent = item.comments.length;
-      photo.querySelector('.picture__likes').textContent = item.likes;
-
-      return photo;
-    },
-
-    // Создаем случайную аватарку
-    getRandomAvatar: function () {
-      return 'img/avatar-' + window.data.getRandomNumber(1, window.data.AVATAR_COUNT) + '.svg';
-    }
-  };
-  var template = document.querySelector('#picture').content.querySelector('a');
-
-  // Перемешиваем массив
-  var shakeArray = function (array) {
-    var j;
-    var temp;
-    for (var i = array.length - 1; i > 0; i--) {
-      j = Math.floor(Math.random() * (i + 1));
-      temp = array[j];
-      array[j] = array[i];
-      array[i] = temp;
-    }
-
-    return array;
-  };
-
-  // Создаем массив случайных комментариев
-  var getRandomCommentsArray = function () {
-    var commentsArray = [];
-    for (var i = 0; i < window.data.getRandomNumber(5, 100); i++) {
-      commentsArray[i] = shakeArray(window.data.picture.COMMENTS_ARRAY).slice(0, window.data.getRandomNumber(1, 2)).join(' ');
-    }
-
-    return commentsArray;
-  };
-
-  //  Создаем адреса на картинки
-  var createUrl = function () {
-    var urlArray = [];
-    for (var i = 0; i < window.data.picture.MOCK_COUNT; i++) {
-      urlArray[i] = 'photos/' + (i + 1) + '.jpg';
-    }
-
-    return shakeArray(urlArray);
+    item: createItem
   };
 })();

@@ -2,5 +2,5 @@
 
 (function () {
   // Отрисовываем маленькие картинки
-  window.gallery.renderPictures(window.data.createRandomPicturesArray(window.data.picture.MOCK_COUNT));
+  window.gallery.render(window.data.randomArray(window.data.picture.MOCK_COUNT));
 })();
