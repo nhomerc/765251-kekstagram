@@ -2,26 +2,7 @@
 
 (function () {
   var socialCommentList = document.querySelector('.social__comments');
-  var AVATAR_COUNT = 6;
-  var imgPreviewList = document.querySelectorAll('.picture');
   var btnModalClose = document.querySelector('.big-picture__cancel');
-
-  // Заполняем данные большой картинки
-  var getPicturePreviewData = function (evt) {
-    var target = evt.currentTarget;
-    var imgPreviewData = {
-      url: target.querySelector('img').src,
-      likes: target.querySelector('.picture__likes').textContent,
-      comments: target.querySelector('.picture__comments').textContent,
-    };
-
-    return imgPreviewData;
-  };
-
-  // Создаем случайную аватарку
-  var getRandomAvatar = function () {
-    return 'img/avatar-' + window.data.randomizer(1, AVATAR_COUNT) + '.svg';
-  };
 
   var removeChild = function (elem) {
     while (elem.firstChild) {
@@ -30,24 +11,26 @@
   };
 
   // Создаем комментарии
-  var createComments = function (item, count) {
+  var createComments = function (item) {
     var fragment = document.createDocumentFragment();
+    var showMessages = (item.length > 5) ? 5 : item.length;
+
     removeChild(socialCommentList);
 
-    for (var i = 0; i < count; i++) {
+    for (var i = 0; i < showMessages; i++) {
       var commentBlock = document.createElement('li');
       commentBlock.className = 'social__comment social__comment--text';
 
       var avatar = document.createElement('img');
       avatar.className = 'social__picture';
-      avatar.src = getRandomAvatar();
+      avatar.src = item[i].avatar;
       avatar.width = 35;
       avatar.height = 35;
       commentBlock.appendChild(avatar);
 
       var text = document.createElement('p');
       text.className = 'social__text';
-      text.textContent = item.comments[i];
+      text.textContent = item[i].message;
       commentBlock.appendChild(text);
 
       fragment.appendChild(commentBlock);
@@ -61,7 +44,7 @@
     window.data.bigPicture.querySelector('.big-picture__img').querySelector('img').src = item.url;
     window.data.bigPicture.querySelector('.likes-count').textContent = item.likes;
     window.data.bigPicture.querySelector('.comments-count').textContent = item.comments;
-    createComments(window.data.mockPicturesArray[0], 5);
+    window.data.bigPicture.querySelector('.social__caption').textContent = item.description;
   };
 
   // Закрытие модального окна
@@ -89,17 +72,24 @@
     }
   };
 
-  // Обработчки события нажатия на превью картинку
-  var onImagePreviewClick = function (evt) {
-    evt.preventDefault();
-    generateBigPicture(getPicturePreviewData(evt));
+  // Заполняем данные большой картинки
+  var getPicturePreviewData = function (evt) {
+    var target = evt.target.closest('a');
+    var allPictures = [].slice.apply(document.querySelectorAll('.picture'));
+    if (!target) {
+      return;
+    }
+    var imgPreviewData = {
+      url: target.querySelector('img').src,
+      likes: target.querySelector('.picture__likes').textContent,
+      comments: target.querySelector('.picture__comments').textContent,
+      description: window.picture.data[allPictures.indexOf(target)].description
+    };
+    generateBigPicture(imgPreviewData);
+    createComments(window.picture.data[allPictures.indexOf(target)].comments);
     openModal();
   };
 
-  // Добавляем обработчкик 'click' на превью картинки
-  for (var i = 0; i < imgPreviewList.length; i++) {
-    imgPreviewList[i].addEventListener('click', onImagePreviewClick);
-  }
-
+  window.data.blockPictures.addEventListener('click', getPicturePreviewData);
   btnModalClose.addEventListener('click', onBtnModalCloseClick);
 })();
