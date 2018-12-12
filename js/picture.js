@@ -2,5 +2,11 @@
 
 (function () {
   // Отрисовываем маленькие картинки
-  window.gallery.render(window.data.randomArray(window.data.picture.MOCK_COUNT));
+  var onSuccess = function (photos) {
+    window.gallery.render(photos);
+    window.picture.data = photos;
+  };
+
+  window.backend.load(onSuccess, window.backend.onError);
+  window.picture.data = [];
 })();

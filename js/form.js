@@ -52,7 +52,7 @@
 
   // Закрытие окна по ESC
   var onImgUploadEscPress = function (evt) {
-    if (evt.keyCode === window.data.ESC_KEYCODE) {
+    if (evt.keyCode === window.data.ESC_KEYCODE && !window.data.errorBlockShow) {
       closeEditingImage();
     }
   };
@@ -211,8 +211,6 @@
   btnScaleControlBigger.addEventListener('click', onBtnScaleControlBiggerClick);
 
   // Проверка хэштега на валидность
-
-
   var MAX_TAGS = 5;
   var MAX_TAG_LENGTH = 20;
 
@@ -256,11 +254,45 @@
     }
   };
 
+  var successUpload = function () {
+    var template = document.querySelector('#success').content.querySelector('.success');
+    var successBlock = template.cloneNode(true);
+    var successBtn = successBlock.querySelector('.success__button');
+    document.querySelector('main').appendChild(successBlock);
+    document.querySelector('.success').style.zIndex = '2';
+
+    var closeSuccessBlock = function () {
+      successBlock.remove();
+      successBtn.removeEventListener('click', onSuccessBtnClick);
+      document.removeEventListener('click', onScreenClick);
+      document.removeEventListener('keydown', onEscPress);
+      closeEditingImage();
+    };
+
+    var onSuccessBtnClick = function () {
+      closeSuccessBlock();
+    };
+
+    var onScreenClick = function () {
+      closeSuccessBlock();
+    };
+
+    var onEscPress = function (evt) {
+      if (evt.keyCode === window.data.ESC_KEYCODE) {
+        closeSuccessBlock();
+      }
+    };
+
+    successBtn.addEventListener('click', onSuccessBtnClick);
+    document.addEventListener('click', onScreenClick);
+    document.addEventListener('keydown', onEscPress);
+  };
+
   // Проверка формы на валидность
   var checkValidations = function (evt) {
     evt.preventDefault();
     checkHashtag();
-    formUpload.submit();
+    window.backend.save(new FormData(formUpload), successUpload, window.backend.onError);
   };
 
   inputHashtag.addEventListener('input', checkHashtag);
