@@ -52,7 +52,7 @@
 
   // Закрытие окна по ESC
   var onImgUploadEscPress = function (evt) {
-    if (evt.keyCode === window.data.ESC_KEYCODE) {
+    if (evt.keyCode === window.data.ESC_KEYCODE && !window.data.errorBlockShow) {
       closeEditingImage();
     }
   };

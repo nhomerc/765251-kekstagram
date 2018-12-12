@@ -25,6 +25,7 @@
     // Рандомайзер
     randomizer: getRandomNumber,
     // Создаем описание картнинок в миниатюре
-    item: createItem
+    item: createItem,
+    errorBlockShow: false
   };
 })();
