@@ -3,6 +3,11 @@
 (function () {
   var socialCommentList = document.querySelector('.social__comments');
   var btnModalClose = document.querySelector('.big-picture__cancel');
+  var MAX_NUMBER_MESSAGES = 5;
+  var loadMoreCommentsBtn = document.querySelector('.social__comments-loader');
+  var lastIndex = 5;
+  var commentsArray = [];
+  var showComments = document.querySelector('.social__comment-count');
 
   var removeChild = function (elem) {
     while (elem.firstChild) {
@@ -11,13 +16,14 @@
   };
 
   // Создаем комментарии
-  var createComments = function (item) {
+  var createComments = function (item, count) {
     var fragment = document.createDocumentFragment();
-    var showMessages = (item.length > 5) ? 5 : item.length;
+    lastIndex = (item.length > lastIndex) ? lastIndex : item.length;
 
     removeChild(socialCommentList);
 
-    for (var i = 0; i < showMessages; i++) {
+
+    for (var i = 0; i < lastIndex; i++) {
       var commentBlock = document.createElement('li');
       commentBlock.className = 'social__comment social__comment--text';
 
@@ -37,6 +43,17 @@
     }
 
     socialCommentList.appendChild(fragment);
+    showComments.innerHTML = lastIndex + ' из <span class="comments-count">' + count + '</span> комментариев';
+  };
+
+  // Нажитие кнопки дополнительных комментариев
+  var onLoadMoreCommentsBtnClick = function () {
+    var moreCommentsArray = commentsArray.slice(0, lastIndex + 5);
+    if (commentsArray.length <= lastIndex + 5) {
+      loadMoreCommentsBtn.classList.add('visually-hidden');
+    }
+    lastIndex += MAX_NUMBER_MESSAGES;
+    createComments(moreCommentsArray, commentsArray.length);
   };
 
   // Создаем большую картинку
@@ -75,6 +92,8 @@
   // Заполняем данные большой картинки
   var getPicturePreviewData = function (evt) {
     var target = evt.target.closest('a');
+    lastIndex = MAX_NUMBER_MESSAGES;
+    loadMoreCommentsBtn.classList.remove('visually-hidden');
     var allPictures = [].slice.apply(document.querySelectorAll('.picture'));
     if (!target) {
       return;
@@ -86,10 +105,12 @@
       description: window.picture.data[allPictures.indexOf(target)].description
     };
     generateBigPicture(imgPreviewData);
-    createComments(window.picture.data[allPictures.indexOf(target)].comments);
+    createComments(window.picture.data[allPictures.indexOf(target)].comments, window.picture.data[allPictures.indexOf(target)].comments.length);
+    commentsArray = window.picture.data[allPictures.indexOf(target)].comments;
     openModal();
   };
 
+  loadMoreCommentsBtn.addEventListener('click', onLoadMoreCommentsBtnClick);
   window.data.blockPictures.addEventListener('click', getPicturePreviewData);
   btnModalClose.addEventListener('click', onBtnModalCloseClick);
 })();
