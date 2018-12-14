@@ -42,9 +42,7 @@
 
   // Обработка на конпку Популярные
   var onPopularBtnClick = function () {
-    var popularArray = window.data.sourceArray.slice();
-    popularArray = window.data.shake(popularArray);
-    changeFilter(popularArray, popularBtn);
+    changeFilter(window.data.sourceArray, popularBtn);
   };
 
   // Обработка на кнопку Новые
