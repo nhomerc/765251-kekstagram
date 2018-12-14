@@ -75,9 +75,9 @@
     changeEffect(DEFAULT_PIN_POSITION.slice(0, -1));
   };
 
-  for (var j = 0; j < radioBtnEffect.length; j++) {
-    radioBtnEffect[j].addEventListener('click', onRadioEffectBtnClick);
-  }
+  radioBtnEffect.forEach(function (radioBtnEffect) {
+    radioBtnEffect.addEventListener('click', onRadioEffectBtnClick);
+  });
 
   // Нажатие кнопки по пину слайдера
   var onEffectSliderPinMouseDown = function (evt) {

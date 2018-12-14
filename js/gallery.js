@@ -10,9 +10,7 @@
 
   // Меняем отрисовку кнопки
   var changeActiveBtn = function (btn) {
-    if (btn.classList.contains('img-filters__button--active')) {
-      return;
-    } else {
+    if (!btn.classList.contains('img-filters__button--active')) {
       var activeButton = document.querySelector('.img-filters__button--active');
       activeButton.classList.remove('img-filters__button--active');
       btn.classList.add('img-filters__button--active');
