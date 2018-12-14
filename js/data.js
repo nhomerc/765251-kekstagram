@@ -2,6 +2,8 @@
 
 (function () {
   var template = document.querySelector('#picture').content.querySelector('a');
+  var DEBOUNCE_INTERVAL = 500;
+  var lastTimeout;
 
   // Рандомайзер
   var getRandomNumber = function (min, max) {
@@ -18,6 +20,33 @@
     return photo;
   };
 
+  // Перемешивание массива
+  var shakeArray = function (array) {
+    var j;
+    var temp;
+    for (var i = array.length - 1; i > 0; i--) {
+      j = Math.floor(Math.random() * (i + 1));
+      temp = array[j];
+      array[j] = array[i];
+      array[i] = temp;
+    }
+
+    return array;
+  };
+
+  // Сортировка массива по убыванию
+  var sortArray = function (first, second) {
+    return second.comments.length - first.comments.length;
+  };
+
+  // Устраняем "дребезг"
+  var debounce = function (pictureArray) {
+    if (lastTimeout) {
+      window.clearTimeout(lastTimeout);
+    }
+    lastTimeout = window.setTimeout(pictureArray, DEBOUNCE_INTERVAL);
+  };
+
   window.data = {
     ESC_KEYCODE: 27,
     blockPictures: document.querySelector('.pictures'),
@@ -26,6 +55,9 @@
     randomizer: getRandomNumber,
     // Создаем описание картнинок в миниатюре
     item: createItem,
-    errorBlockShow: false
+    shake: shakeArray,
+    sourceArray: [],
+    sort: sortArray,
+    timeDelay: debounce
   };
 })();
