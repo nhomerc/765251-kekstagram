@@ -3,11 +3,11 @@
 (function () {
   var socialCommentList = document.querySelector('.social__comments');
   var btnModalClose = document.querySelector('.big-picture__cancel');
-  var MAX_NUMBER_MESSAGES = 5;
   var loadMoreCommentsBtn = document.querySelector('.social__comments-loader');
   var lastIndex = 5;
   var commentsArray = [];
   var showComments = document.querySelector('.social__comment-count');
+  var MAX_NUMBER_MESSAGES = 5;
 
   var removeChild = function (elem) {
     while (elem.firstChild) {
@@ -21,7 +21,6 @@
     lastIndex = (item.length > lastIndex) ? lastIndex : item.length;
 
     removeChild(socialCommentList);
-
 
     for (var i = 0; i < lastIndex; i++) {
       var commentBlock = document.createElement('li');

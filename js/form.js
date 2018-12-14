@@ -17,11 +17,13 @@
   var inputHashtag = document.querySelector('.text__hashtags');
   var currentEffectClass = 'effect__preview--none';
   var formUpload = document.querySelector('.img-upload__form');
+  var previewPicture = document.querySelector('.img-upload__preview img');
   var LINE_WIDTH = 453;
   var DEFAULT_PIN_POSITION = '100%';
+  var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
   // Установка дефолтных параметров для окна редактирования
-  var defaultSettings = function () {
+  var setDefaultSettings = function () {
     effectSliderPin.style.left = DEFAULT_PIN_POSITION;
     effectLevelDepth.style.width = DEFAULT_PIN_POSITION;
     inputScaleControlValue.value = 100 + '%';
@@ -35,6 +37,22 @@
 
   // Показ окна редактирования
   var showEditingImage = function () {
+    var file = uploadFile.files[0];
+    var fileName = file.name.toLowerCase();
+
+    var matches = FILE_TYPES.some(function (it) {
+      return fileName.endsWith(it);
+    });
+
+    if (matches) {
+      var reader = new FileReader();
+
+      reader.addEventListener('load', function () {
+        previewPicture.src = reader.result;
+      });
+
+      reader.readAsDataURL(file);
+    }
     effectValue.value = DEFAULT_PIN_POSITION.slice(0, -1).toString();
     sliderEffectLevel.classList.add('hidden');
     imgEditing.classList.add(currentEffectClass);
@@ -46,7 +64,7 @@
   var closeEditingImage = function () {
     imageEditingForm.classList.add('hidden');
     document.removeEventListener('keydown', onImgUploadEscPress);
-    defaultSettings();
+    setDefaultSettings();
   };
 
   // Закрытие окна по ESC
