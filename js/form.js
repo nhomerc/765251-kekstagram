@@ -14,7 +14,6 @@
   var effectValue = document.querySelector('.effect-level__value');
   var sliderEffectLevel = document.querySelector('.img-upload__effect-level');
   var effectLevelDepth = document.querySelector('.effect-level__depth');
-  var radioBtnEffect = document.querySelectorAll('.effects__radio');
   var inputHashtag = document.querySelector('.text__hashtags');
   var currentEffectClass = 'effect__preview--none';
   var formUpload = document.querySelector('.img-upload__form');
@@ -75,7 +74,7 @@
     changeEffect(DEFAULT_PIN_POSITION.slice(0, -1));
   };
 
-  radioBtnEffect.forEach(function (radioBtnEffect) {
+  document.querySelectorAll('.effects__radio').forEach(function (radioBtnEffect) {
     radioBtnEffect.addEventListener('click', onRadioEffectBtnClick);
   });
 
