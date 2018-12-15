@@ -15,7 +15,6 @@
     }
   };
 
-  // Создаем комментарии
   var createComments = function (item, count) {
     var fragment = document.createDocumentFragment();
     lastIndex = (item.length > lastIndex) ? lastIndex : item.length;
@@ -45,7 +44,6 @@
     showComments.innerHTML = lastIndex + ' из <span class="comments-count">' + count + '</span> комментариев';
   };
 
-  // Нажитие кнопки дополнительных комментариев
   var onLoadMoreCommentsBtnClick = function () {
     var moreCommentsArray = commentsArray.slice(0, lastIndex + 5);
     if (commentsArray.length <= lastIndex + 5) {
@@ -55,7 +53,6 @@
     createComments(moreCommentsArray, commentsArray.length);
   };
 
-  // Создаем большую картинку
   var generateBigPicture = function (item) {
     window.data.bigPicture.querySelector('.big-picture__img').querySelector('img').src = item.url;
     window.data.bigPicture.querySelector('.likes-count').textContent = item.likes;
@@ -63,21 +60,18 @@
     window.data.bigPicture.querySelector('.social__caption').textContent = item.description;
   };
 
-  // Закрытие модального окна
   var closeModal = function () {
     document.body.classList.remove('modal-open');
     window.data.bigPicture.classList.add('hidden');
     document.removeEventListener('keydown', onBtnModalCloseEscPress);
   };
 
-  // Открытие модального окна
   var openModal = function () {
     window.data.bigPicture.classList.remove('hidden');
     document.body.classList.add('modal-open');
     document.addEventListener('keydown', onBtnModalCloseEscPress);
   };
 
-  // Функции закрытия модального окна
   var onBtnModalCloseClick = function () {
     closeModal();
   };
@@ -88,7 +82,6 @@
     }
   };
 
-  // Заполняем данные большой картинки
   var getPicturePreviewData = function (evt) {
     var target = evt.target.closest('a');
     lastIndex = MAX_NUMBER_MESSAGES;

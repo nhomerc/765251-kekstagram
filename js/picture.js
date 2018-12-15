@@ -3,7 +3,6 @@
 (function () {
   var filtersImg = document.querySelector('.img-filters');
 
-  // Отрисовываем маленькие картинки
   var onSuccessLoad = function (photos) {
     filtersImg.classList.remove('img-filters--inactive');
     window.data.sourceArray = photos;

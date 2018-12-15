@@ -9,7 +9,6 @@
     var xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
 
-    // Обработчик на событие загрузки с сервера или на сервер
     xhr.addEventListener('load', function () {
       if (xhr.status === SUCCESS_CODE) {
         onSuccess(xhr.response);
@@ -29,7 +28,6 @@
     return xhr;
   };
 
-  // Получаем с сервера данные
   var loadPictures = function (onSuccess, onError) {
     var xhr = getXhr(onSuccess, onError);
 
@@ -37,7 +35,6 @@
     xhr.send();
   };
 
-  // Загружаем на сервер фотографию
   var uploadPicture = function (data, onSuccess, onError) {
     var xhr = getXhr(onSuccess, onError);
 
@@ -45,7 +42,6 @@
     xhr.send(data);
   };
 
-  // Ошибки
   var errorConnection = function (errorMessage) {
     var template = document.querySelector('#error').content.querySelector('.error');
     var errorBlock = template.cloneNode(true);

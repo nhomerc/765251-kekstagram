@@ -1,8 +1,6 @@
 'use strict';
 
 (function () {
-  // Редактирование изображения
-  // Откртыие и закрытие окна редактирования
   var uploadFile = document.querySelector('#upload-file');
   var imageEditingForm = document.querySelector('.img-upload__overlay');
   var closeButton = document.querySelector('#upload-cancel');
@@ -21,8 +19,12 @@
   var LINE_WIDTH = 453;
   var DEFAULT_PIN_POSITION = '100%';
   var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
+  var MAX_TAGS = 5;
+  var MAX_TAG_LENGTH = 20;
+  var LEFT_KEYCODE = 39;
+  var RIGHT_KEYCODE = 37;
+  var TAB_KEYCODE = 9;
 
-  // Установка дефолтных параметров для окна редактирования
   var setDefaultSettings = function () {
     effectSliderPin.style.left = DEFAULT_PIN_POSITION;
     effectLevelDepth.style.width = DEFAULT_PIN_POSITION;
@@ -35,7 +37,6 @@
     uploadFile.value = '';
   };
 
-  // Показ окна редактирования
   var showEditingImage = function () {
     var file = uploadFile.files[0];
     var fileName = file.name.toLowerCase();
@@ -60,14 +61,12 @@
     document.addEventListener('keydown', onImgUploadEscPress);
   };
 
-  // Закрытие окна редактирования
   var closeEditingImage = function () {
     imageEditingForm.classList.add('hidden');
     document.removeEventListener('keydown', onImgUploadEscPress);
     setDefaultSettings();
   };
 
-  // Закрытие окна по ESC
   var onImgUploadEscPress = function (evt) {
     if (evt.keyCode === window.data.ESC_KEYCODE && !window.data.errorBlockShow) {
       closeEditingImage();
@@ -77,8 +76,6 @@
   uploadFile.addEventListener('change', showEditingImage);
   closeButton.addEventListener('click', closeEditingImage);
 
-  // Наложение эффектов
-  // Функция наложения эффекта
   var onRadioEffectBtnClick = function (evt) {
     imgEditing.className = '';
     sliderEffectLevel.classList.remove('hidden');
@@ -96,7 +93,6 @@
     radioBtnEffect.addEventListener('click', onRadioEffectBtnClick);
   });
 
-  // Нажатие кнопки по пину слайдера
   var onEffectSliderPinMouseDown = function (evt) {
     var onEffectSliderPinMove = function (moveEvt) {
       moveEvt.preventDefault();
@@ -136,7 +132,6 @@
     document.addEventListener('mouseup', onEffectSliderPinMouseUp);
   };
 
-  // Наложение эффектов от положения пина
   var changeEffect = function (percent) {
     switch (currentEffectClass) {
       case 'effect__preview--none':
@@ -160,12 +155,9 @@
     }
   };
 
-  // Измение положения пина с помощью стрелок
   var onEffectSliderPinKeydown = function (evt) {
     evt.preventDefault();
-    var LEFT_KEYCODE = 39;
-    var RIGHT_KEYCODE = 37;
-    var TAB_KEYCODE = 9;
+
     var jump;
 
     if (evt.keyCode === RIGHT_KEYCODE) {
@@ -194,12 +186,10 @@
   effectSliderPin.addEventListener('focus', onEffectSliderPinFocus);
   effectSliderPin.addEventListener('mousedown', onEffectSliderPinMouseDown);
 
-  // Масштаб
   var btnScaleControlSmaller = document.querySelector('.scale__control--smaller');
   var btnScaleControlBigger = document.querySelector('.scale__control--bigger');
   inputScaleControlValue.value = '100%';
 
-  // Фунцкия уменьшения масштаба
   var onBtnScaleControlSmallerClick = function () {
     if (inputScaleControlValue.value.slice(0, -1) > 50) {
       inputScaleControlValue.value = inputScaleControlValue.value.slice(0, -1) - 25 + '%';
@@ -209,12 +199,10 @@
     onScaleControlValueChange(inputScaleControlValue.value);
   };
 
-  // Добавление стиля transform scale
   var onScaleControlValueChange = function (value) {
     imgUploadPreview.style.transform = 'scale(' + value.slice(0, -1) / 100 + ')';
   };
 
-  // Функция увеличение масштаба
   var onBtnScaleControlBiggerClick = function () {
     if (inputScaleControlValue.value.slice(0, -1) < 76) {
       inputScaleControlValue.value = +inputScaleControlValue.value.slice(0, -1) + 25 + '%';
@@ -226,10 +214,6 @@
 
   btnScaleControlSmaller.addEventListener('click', onBtnScaleControlSmallerClick);
   btnScaleControlBigger.addEventListener('click', onBtnScaleControlBiggerClick);
-
-  // Проверка хэштега на валидность
-  var MAX_TAGS = 5;
-  var MAX_TAG_LENGTH = 20;
 
   var checkValidateHashtag = function (arr) {
     for (var i = 0; i < arr.length; i++) {
@@ -305,7 +289,6 @@
     document.addEventListener('keydown', onEscPress);
   };
 
-  // Проверка формы на валидность
   var checkValidations = function (evt) {
     evt.preventDefault();
     checkHashtag();
