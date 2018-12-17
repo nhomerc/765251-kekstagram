@@ -1,6 +1,8 @@
 'use strict';
 
 (function () {
+  var COUNT_ITEM_RANDOM_ARRAY = 10;
+
   var removeChild = function () {
     while (window.data.blockPictures.querySelector('.picture')) {
       window.data.blockPictures.querySelector('.picture').remove();
@@ -42,7 +44,7 @@
   var onNewBtnClick = function () {
     var newRandomArray = window.data.sourceArray.slice();
     newRandomArray = window.data.shake(newRandomArray);
-    changeFilter(newRandomArray.slice(0, 10), newBtn);
+    changeFilter(newRandomArray.slice(0, COUNT_ITEM_RANDOM_ARRAY), newBtn);
   };
 
   var onDiscussedBtnClick = function () {

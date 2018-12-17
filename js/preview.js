@@ -1,13 +1,13 @@
 'use strict';
 
 (function () {
-  var socialCommentList = document.querySelector('.social__comments');
-  var btnModalClose = document.querySelector('.big-picture__cancel');
-  var loadMoreCommentsBtn = document.querySelector('.social__comments-loader');
-  var lastIndex = 5;
-  var commentsArray = [];
-  var showComments = document.querySelector('.social__comment-count');
   var MAX_NUMBER_MESSAGES = 5;
+  var socialCommentList = window.data.bigPicture.querySelector('.social__comments');
+  var btnModalClose = window.data.bigPicture.querySelector('.big-picture__cancel');
+  var loadMoreCommentsBtn = window.data.bigPicture.querySelector('.social__comments-loader');
+  var lastIndex = MAX_NUMBER_MESSAGES;
+  var commentsArray = [];
+  var showComments = window.data.bigPicture.querySelector('.social__comment-count');
 
   var removeChild = function (elem) {
     while (elem.firstChild) {
@@ -18,6 +18,9 @@
   var createComments = function (item, count) {
     var fragment = document.createDocumentFragment();
     lastIndex = (item.length > lastIndex) ? lastIndex : item.length;
+    if (item.length < MAX_NUMBER_MESSAGES) {
+      loadMoreCommentsBtn.classList.add('visually-hidden');
+    }
 
     removeChild(socialCommentList);
 
@@ -45,8 +48,8 @@
   };
 
   var onLoadMoreCommentsBtnClick = function () {
-    var moreCommentsArray = commentsArray.slice(0, lastIndex + 5);
-    if (commentsArray.length <= lastIndex + 5) {
+    var moreCommentsArray = commentsArray.slice(0, lastIndex + MAX_NUMBER_MESSAGES);
+    if (commentsArray.length <= lastIndex + MAX_NUMBER_MESSAGES) {
       loadMoreCommentsBtn.classList.add('visually-hidden');
     }
     lastIndex += MAX_NUMBER_MESSAGES;
@@ -82,7 +85,7 @@
     }
   };
 
-  var getPicturePreviewData = function (evt) {
+  var onBlockPicturesClick = function (evt) {
     var target = evt.target.closest('a');
     lastIndex = MAX_NUMBER_MESSAGES;
     loadMoreCommentsBtn.classList.remove('visually-hidden');
@@ -103,6 +106,6 @@
   };
 
   loadMoreCommentsBtn.addEventListener('click', onLoadMoreCommentsBtnClick);
-  window.data.blockPictures.addEventListener('click', getPicturePreviewData);
+  window.data.blockPictures.addEventListener('click', onBlockPicturesClick);
   btnModalClose.addEventListener('click', onBtnModalCloseClick);
 })();
