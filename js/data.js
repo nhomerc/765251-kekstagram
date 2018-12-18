@@ -2,8 +2,6 @@
 
 (function () {
   var template = document.querySelector('#picture').content.querySelector('a');
-  var lastTimeout;
-  var DEBOUNCE_INTERVAL = 500;
 
   var getRandomNumber = function (min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
@@ -35,13 +33,6 @@
     return second.comments.length - first.comments.length;
   };
 
-  var debounce = function (pictureArray) {
-    if (lastTimeout) {
-      window.clearTimeout(lastTimeout);
-    }
-    lastTimeout = window.setTimeout(pictureArray, DEBOUNCE_INTERVAL);
-  };
-
   window.data = {
     ESC_KEYCODE: 27,
     blockPictures: document.querySelector('.pictures'),
@@ -50,7 +41,6 @@
     item: createItem,
     shake: shakeArray,
     sourceArray: [],
-    sort: sortArray,
-    timeDelay: debounce
+    sort: sortArray
   };
 })();

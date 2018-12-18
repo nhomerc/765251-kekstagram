@@ -48,14 +48,12 @@
     var errorBtn = errorBlock.querySelectorAll('.error__button');
     errorBlock.querySelector('.error__title').innerHTML = errorMessage;
     document.querySelector('main').appendChild(errorBlock);
-    window.data.errorBlockShow = true;
     document.querySelector('.error').style.zIndex = '2';
 
     var closeErrorBlock = function () {
       document.removeEventListener('keydown', onEcsKeyPress);
       document.body.removeEventListener('click', onScreenClick);
       document.querySelector('.error').remove();
-      window.data.errorBlockShow = false;
     };
 
     var onErrorBtnClick = function () {

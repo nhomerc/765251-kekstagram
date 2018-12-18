@@ -19,17 +19,20 @@
   var LINE_WIDTH = 453;
   var DEFAULT_PIN_POSITION = '100%';
   var FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
-  var MAX_TAGS = 5;
-  var MAX_TAG_LENGTH = 20;
   var LEFT_KEYCODE = 39;
   var RIGHT_KEYCODE = 37;
   var TAB_KEYCODE = 9;
   var ARROW_KEY_JUMP = 5;
-  var MIN_HASHTAG_LENGTH = 2;
   var Resize = {
     MIN: 25,
     MAX: 100,
     STEP: 25
+  };
+  var Hashtags = {
+    MAX_TAGS: 5,
+    MAX_TAG_LENGTH: 20,
+    MIN_HASHTAG_LENGTH: 2,
+    SHARP_POSITION: 1
   };
 
   var setDefaultSettings = function () {
@@ -75,7 +78,7 @@
   };
 
   var onImgUploadEscPress = function (evt) {
-    if (evt.keyCode === window.data.ESC_KEYCODE && !window.data.errorBlockShow) {
+    if (evt.keyCode === window.data.ESC_KEYCODE && !document.querySelector('.error')) {
       closeEditingImage();
     }
   };
@@ -234,14 +237,17 @@
       if (arr[i][0] !== '#') {
         return 'Хеш-тег должен начинаться с #';
       }
-      if (arr[i][0] === '#' && arr[i].length < MIN_HASHTAG_LENGTH) {
+      if (arr[i][0] === '#' && arr[i].length < Hashtags.MIN_HASHTAG_LENGTH) {
         return 'Хеш-тег не может состоять только из одной решётки';
       }
-      if (arr[i].length > MAX_TAG_LENGTH) {
+      if (arr[i].length > Hashtags.MAX_TAG_LENGTH) {
         return 'Длина одного хэш-тега не может быть больше 20 символов';
       }
-      if (arr.length > MAX_TAGS) {
+      if (arr.length > Hashtags.MAX_TAGS) {
         return 'Нельзя указать больше 5 хэш-тегов';
+      }
+      if (arr[i].indexOf('#', Hashtags.SHARP_POSITION) > 0) {
+        return 'Хэштег должен разделяться пробелом';
       }
       for (var z = i + 1; z < arr.length; z++) {
         if (arr[i].toLowerCase() === arr[z].toLowerCase()) {
@@ -250,8 +256,7 @@
         }
       }
     }
-    inputHashtag.style.outline = '';
-    inputHashtag.setCustomValidity('');
+    resetHashtagError();
     return true;
   };
 
@@ -260,6 +265,7 @@
     hashtagString = hashtagString.trim().replace(/\s{2,}/g, ' ');
 
     if (hashtagString === '') {
+      resetHashtagError();
       return;
     }
     var messageValidation = checkValidateHashtag(hashtagString.split(' '));
@@ -267,6 +273,11 @@
       inputHashtag.style.outline = '3px solid red';
       inputHashtag.setCustomValidity(messageValidation);
     }
+  };
+
+  var resetHashtagError = function () {
+    inputHashtag.style.outline = '';
+    inputHashtag.setCustomValidity('');
   };
 
   var successUpload = function () {
