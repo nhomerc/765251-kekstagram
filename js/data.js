@@ -34,7 +34,7 @@
   };
 
   window.data = {
-    ESC_KEYCODE: 27,
+    escKeyCode: 27,
     blockPictures: document.querySelector('.pictures'),
     bigPicture: document.querySelector('.big-picture'),
     randomizer: getRandomNumber,

@@ -10,6 +10,6 @@
     window.gallery.render();
   };
 
-  window.backend.load(onSuccessLoad, window.backend.onError);
+  window.backend.load(onSuccessLoad);
   window.picture.data = [];
 })();

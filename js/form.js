@@ -24,15 +24,15 @@
   var TAB_KEYCODE = 9;
   var ARROW_KEY_JUMP = 5;
   var Resize = {
-    MIN: 25,
-    MAX: 100,
-    STEP: 25
+    min: 25,
+    max: 100,
+    step: 25
   };
   var Hashtags = {
-    MAX_TAGS: 5,
-    MAX_TAG_LENGTH: 20,
-    MIN_HASHTAG_LENGTH: 2,
-    SHARP_POSITION: 1
+    maxTags: 5,
+    maxTagLength: 20,
+    minHashtagLength: 2,
+    sharpPosition: 1
   };
 
   var setDefaultSettings = function () {
@@ -78,7 +78,7 @@
   };
 
   var onImgUploadEscPress = function (evt) {
-    if (evt.keyCode === window.data.ESC_KEYCODE && !document.querySelector('.error')) {
+    if (evt.keyCode === window.data.escKeyCode && !document.querySelector('.error')) {
       closeEditingImage();
     }
   };
@@ -208,10 +208,10 @@
   inputScaleControlValue.value = '100%';
 
   var onBtnScaleControlSmallerClick = function () {
-    if ((inputScaleControlValue.value.slice(0, -1) - Resize.STEP) > Resize.MIN) {
-      inputScaleControlValue.value = inputScaleControlValue.value.slice(0, -1) - Resize.STEP + '%';
+    if ((inputScaleControlValue.value.slice(0, -1) - Resize.step) > Resize.min) {
+      inputScaleControlValue.value = inputScaleControlValue.value.slice(0, -1) - Resize.step + '%';
     } else {
-      inputScaleControlValue.value = Resize.MIN + '%';
+      inputScaleControlValue.value = Resize.min + '%';
     }
     onScaleControlValueChange(inputScaleControlValue.value);
   };
@@ -221,10 +221,10 @@
   };
 
   var onBtnScaleControlBiggerClick = function () {
-    if ((+inputScaleControlValue.value.slice(0, -1) + Resize.STEP) < Resize.MAX) {
-      inputScaleControlValue.value = +inputScaleControlValue.value.slice(0, -1) + Resize.STEP + '%';
+    if ((+inputScaleControlValue.value.slice(0, -1) + Resize.step) < Resize.max) {
+      inputScaleControlValue.value = +inputScaleControlValue.value.slice(0, -1) + Resize.step + '%';
     } else {
-      inputScaleControlValue.value = Resize.MAX + '%';
+      inputScaleControlValue.value = Resize.max + '%';
     }
     onScaleControlValueChange(inputScaleControlValue.value);
   };
@@ -237,16 +237,16 @@
       if (arr[i][0] !== '#') {
         return 'Хеш-тег должен начинаться с #';
       }
-      if (arr[i][0] === '#' && arr[i].length < Hashtags.MIN_HASHTAG_LENGTH) {
+      if (arr[i][0] === '#' && arr[i].length < Hashtags.minHashtagLength) {
         return 'Хеш-тег не может состоять только из одной решётки';
       }
-      if (arr[i].length > Hashtags.MAX_TAG_LENGTH) {
+      if (arr[i].length > Hashtags.maxTagLength) {
         return 'Длина одного хэш-тега не может быть больше 20 символов';
       }
-      if (arr.length > Hashtags.MAX_TAGS) {
+      if (arr.length > Hashtags.maxTags) {
         return 'Нельзя указать больше 5 хэш-тегов';
       }
-      if (arr[i].indexOf('#', Hashtags.SHARP_POSITION) > 0) {
+      if (arr[i].indexOf('#', Hashtags.sharpPosition) > 0) {
         return 'Хэштег должен разделяться пробелом';
       }
       for (var z = i + 1; z < arr.length; z++) {
@@ -304,7 +304,7 @@
     };
 
     var onEscPress = function (evt) {
-      if (evt.keyCode === window.data.ESC_KEYCODE) {
+      if (evt.keyCode === window.data.escKeyCode) {
         closeSuccessBlock();
       }
     };
@@ -317,7 +317,7 @@
   var onFormUploadSubmit = function (evt) {
     evt.preventDefault();
     onInputHashtagInput();
-    window.backend.save(new FormData(formUpload), successUpload, window.backend.onError);
+    window.backend.save(new FormData(formUpload), successUpload);
   };
 
   inputHashtag.addEventListener('input', onInputHashtagInput);

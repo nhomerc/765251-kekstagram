@@ -80,7 +80,7 @@
   };
 
   var onBtnModalCloseEscPress = function (evt) {
-    if (evt.keyCode === window.data.ESC_KEYCODE) {
+    if (evt.keyCode === window.data.escKeyCode) {
       closeModal();
     }
   };
